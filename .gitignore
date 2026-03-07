@@ -1,0 +1,15 @@
+# compiled binary
+gh-dashboard
+
+# editor / IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# macOS
+.DS_Store
+
+# test cache / coverage
+*.test
+coverage.out

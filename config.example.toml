@@ -1,0 +1,12 @@
+[github]
+# Use "github.com" for GitHub.com, or your GHE hostname e.g. "github.example.com"
+host = "github.com"
+
+# Query all repos in an org (omit repos = all repos)
+[[orgs]]
+name = "my-org"
+
+# Query only specific repos within an org
+[[orgs]]
+name = "another-org"
+repos = ["my-repo", "other-repo"]
