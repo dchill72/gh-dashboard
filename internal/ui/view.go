@@ -236,7 +236,7 @@ func renderDetail(pr github.PR, w int) string {
 
 func renderMarkdown(body string, width int) string {
 	r, err := glamour.NewTermRenderer(
-		glamour.WithAutoStyle(),
+		glamour.WithStylePath("dark"),
 		glamour.WithWordWrap(width),
 	)
 	if err != nil {
