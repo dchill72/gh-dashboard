@@ -36,6 +36,14 @@ func (r ReviewFilter) String() string {
 	}
 }
 
+// detailCache holds the last glamour-rendered detail pane so we only re-render
+// when the selected PR or the available width actually changes.
+type detailCache struct {
+	prID    string
+	width   int
+	content string
+}
+
 type Model struct {
 	config *config.Config
 	client *github.Client
@@ -56,7 +64,8 @@ type Model struct {
 	sortAsc      bool
 
 	// Detail scrolling
-	viewport viewport.Model
+	viewport    viewport.Model
+	renderCache detailCache
 
 	// Loading / error
 	loading bool
@@ -194,12 +203,14 @@ func (m *Model) adjustListScroll() {
 // ── Detail pane ──────────────────────────────────────────────────────────────
 
 // updateDetail re-renders the selected PR into the viewport and marks it read.
+// Glamour rendering is skipped when the same PR and width are already cached.
 func (m *Model) updateDetail() {
 	if m.width == 0 {
 		return
 	}
 	if len(m.filtered) == 0 {
-		m.viewport.SetContent(dimStyle.Render("\n  No PRs to display.\n\n  Press R to refresh or adjust filters."))
+		m.renderCache = detailCache{} // viewport is about to show non-PR content
+		m.viewport.SetContent(dimStyle.Render("\n  No PRs to display.\n\n  Press F5 to refresh or adjust filters."))
 		return
 	}
 	if m.selected >= len(m.filtered) {
@@ -211,7 +222,15 @@ func (m *Model) updateDetail() {
 	m.state.MarkRead(pr.ID)
 	_ = m.state.Save()
 
-	content := renderDetail(pr, m.detailWidth())
+	w := m.detailWidth()
+	if m.renderCache.prID == pr.ID && m.renderCache.width == w {
+		// Same PR and same width — reuse cached render, just reset scroll.
+		m.viewport.GotoTop()
+		return
+	}
+
+	content := renderDetail(pr, w)
+	m.renderCache = detailCache{prID: pr.ID, width: w, content: content}
 	m.viewport.SetContent(content)
 	m.viewport.GotoTop()
 }
