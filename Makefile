@@ -1,7 +1,7 @@
 BINARY := gh-dashboard
 GO     := go
 
-.PHONY: build run lint vet tidy clean
+.PHONY: build run lint vet test tidy clean
 
 build:
 	$(GO) build -o $(BINARY) .
@@ -14,6 +14,9 @@ lint:
 
 vet:
 	$(GO) vet ./...
+
+test:
+	$(GO) test ./... -v
 
 tidy:
 	$(GO) mod tidy
