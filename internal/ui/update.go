@@ -5,6 +5,7 @@ import (
 
 	"gh-dashboard/internal/config"
 	"gh-dashboard/internal/github"
+	"gh-dashboard/internal/logger"
 )
 
 // ── Messages ─────────────────────────────────────────────────────────────────
@@ -125,7 +126,9 @@ func (m Model) handleKey(msg tea.KeyMsg) (tea.Model, tea.Cmd) {
 
 	case "o":
 		if len(m.filtered) > 0 && m.selected < len(m.filtered) {
-			return m, openBrowserCmd(m.filtered[m.selected].URL)
+			pr := m.filtered[m.selected]
+			logger.L.Info("opening PR in browser", "number", pr.Number, "url", pr.URL, "repo", pr.Repo)
+			return m, openBrowserCmd(pr.URL)
 		}
 
 	case "m":
@@ -135,7 +138,7 @@ func (m Model) handleKey(msg tea.KeyMsg) (tea.Model, tea.Cmd) {
 			_ = m.state.Save()
 		}
 
-	case "R":
+	case "f5":
 		m.loading = true
 		m.err = nil
 		return m, fetchPRsCmd(m.config, m.client)

@@ -13,3 +13,6 @@ gh-dashboard
 # test cache / coverage
 *.test
 coverage.out
+
+# debug logs
+logs/

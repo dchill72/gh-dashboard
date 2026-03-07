@@ -18,6 +18,7 @@ type PR struct {
 	Deletions      int
 	ReviewDecision string // APPROVED | CHANGES_REQUESTED | REVIEW_REQUIRED | ""
 	IsDraft        bool
+	Roles          []string // "reviewer" | "assignee" — may contain both
 }
 
 type OrgQuery struct {

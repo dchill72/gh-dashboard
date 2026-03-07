@@ -71,7 +71,7 @@ GITHUB_TOKEN=ghp_... ./gh-dashboard
 | `r` | Cycle review filter: All → Pending → Approved → Changes Requested |
 | `o` | Open the selected PR in your default browser |
 | `m` | Toggle read/unread for the selected PR |
-| `R` | Refresh PR list from GitHub |
+| `F5` | Refresh PR list from GitHub |
 | `PgUp` / `PgDn` | Scroll the detail pane |
 | `q` / `Ctrl+C` | Quit |
 

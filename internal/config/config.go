@@ -27,7 +27,10 @@ func Load() (*Config, error) {
 	if err != nil {
 		return nil, err
 	}
+	return loadFromFile(path)
+}
 
+func loadFromFile(path string) (*Config, error) {
 	if _, err := os.Stat(path); os.IsNotExist(err) {
 		return nil, fmt.Errorf("config file not found at %s\n\nCreate it with:\n\n  [github]\n  host = \"github.com\"\n\n  [[orgs]]\n  name = \"my-org\"", path)
 	}

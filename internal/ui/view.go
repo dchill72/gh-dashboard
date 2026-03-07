@@ -192,6 +192,14 @@ func renderDetail(pr github.PR, w int) string {
 	case "REVIEW_REQUIRED":
 		badges = append(badges, reviewRequiredStyle.Render("⟳ Review Required"))
 	}
+	for _, role := range pr.Roles {
+		switch role {
+		case "reviewer":
+			badges = append(badges, dimStyle.Render("[reviewer]"))
+		case "assignee":
+			badges = append(badges, dimStyle.Render("[assignee]"))
+		}
+	}
 
 	meta := fmt.Sprintf("@%s  •  %s  •  %s",
 		pr.Author, pr.Repo, pr.CreatedAt.Format("2006-01-02 15:04 UTC"))
@@ -228,7 +236,7 @@ func renderDetail(pr github.PR, w int) string {
 
 func renderMarkdown(body string, width int) string {
 	r, err := glamour.NewTermRenderer(
-		glamour.WithAutoStyle(),
+		glamour.WithStylePath("dark"),
 		glamour.WithWordWrap(width),
 	)
 	if err != nil {
@@ -253,7 +261,7 @@ func (m Model) renderFooter() string {
 		keyHint("r", "review"),
 		keyHint("o", "open"),
 		keyHint("m", "mark read"),
-		keyHint("R", "refresh"),
+		keyHint("F5", "refresh"),
 		keyHint("PgUp/Dn", "scroll"),
 		keyHint("q", "quit"),
 	}
