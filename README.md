@@ -84,16 +84,40 @@ Read/unread status is saved to `~/.config/gh-dashboard/state.json`. PRs are auto
 ```
 main.go
 config.example.toml
+Makefile
 internal/
-  config/config.go     — config loading
+  config/
+    config.go          — TOML config loading
+    config_test.go     — unit tests
   github/
     types.go           — PR and OrgQuery types
-    client.go          — GitHub GraphQL API client
-  state/state.go       — read/unread persistence
+    client.go          — GitHub GraphQL API client (viewer login, paginated search)
+  logger/
+    logger.go          — file-based logger, enabled via LOGGING=1
+  state/
+    state.go           — read/unread persistence (~/.config/gh-dashboard/state.json)
   ui/
-    model.go           — model, layout, filter/sort logic
+    model.go           — Model struct, layout helpers, filter/sort, render cache
     update.go          — key handling, tea.Cmd factories
-    view.go            — rendering (list, detail, header, footer)
-    styles.go          — lipgloss styles
-    browser.go         — cross-platform browser opener
+    view.go            — split-pane rendering (list, detail, header, footer)
+    styles.go          — lipgloss colour palette and styles
+    browser.go         — cross-platform browser opener (xdg-open / open / start)
+```
+
+## Development
+
+```sh
+make build       # compile to ./gh-dashboard
+make run         # build and run (requires GITHUB_TOKEN in env)
+make test        # run all tests with verbose output
+make vet         # run go vet
+make lint        # run golangci-lint (downloaded on first use via go run)
+make tidy        # run go mod tidy
+make clean       # remove the compiled binary
+```
+
+Enable debug logging to `./logs/<timestamp>.log`:
+
+```sh
+LOGGING=1 GITHUB_TOKEN=ghp_... ./gh-dashboard
 ```
