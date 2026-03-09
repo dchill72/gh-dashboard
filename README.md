@@ -15,6 +15,54 @@ Built with [bubbletea](https://github.com/charmbracelet/bubbletea), [bubbles](ht
 - Open PR in your default browser (`o`)
 - Supports GitHub.com and GitHub Enterprise (configured per install)
 
+## Install
+
+### Prebuilt binary (recommended)
+
+```sh
+curl -fsSL https://raw.githubusercontent.com/dchill72/gh-dashboard/main/install.sh | sh
+```
+
+Or review first, then run locally:
+
+```sh
+curl -fsSLO https://raw.githubusercontent.com/dchill72/gh-dashboard/main/install.sh
+sh install.sh
+```
+
+Optional install variables:
+
+```sh
+# install a specific version (accepts v-prefixed tags or plain versions)
+GH_DASHBOARD_VERSION=v0.1.0 sh install.sh
+GH_DASHBOARD_VERSION=0.1.0 sh install.sh
+
+# install from another repo (forks/private mirrors)
+GH_DASHBOARD_REPO=owner/repo sh install.sh
+
+# install to a custom path
+INSTALL_DIR="$HOME/.local/bin" sh install.sh
+```
+
+### Build from source
+
+```sh
+go install .
+```
+
+This places `gh-dashboard` in your `$GOPATH/bin` (ensure it is in `$PATH`).
+
+## Releases
+
+Tagged pushes like `v0.1.0` trigger the release workflow in `.github/workflows/release.yml`, which uses GoReleaser to publish checksummed tarballs for:
+
+- `linux/amd64`
+- `linux/arm64`
+- `darwin/amd64`
+- `darwin/arm64`
+
+Release tags are `vX.Y.Z`, while archive names use `X.Y.Z` (without the `v`). The installer handles this automatically.
+
 ## Setup
 
 ### 1. Config file
@@ -63,7 +111,7 @@ GITHUB_TOKEN=ghp_... ./gh-dashboard
 ## Keybindings
 
 | Key | Action |
-|---|---|
+| --- | --- |
 | `↑` / `↓` / `j` / `k` | Navigate the PR list |
 | `/` | Enter filter mode — live filters by title or repo |
 | `Esc` | Exit filter mode and clear filter text |
@@ -81,7 +129,7 @@ Read/unread status is saved to `~/.config/gh-dashboard/state.json`. PRs are auto
 
 ## Project layout
 
-```
+```text
 main.go
 config.example.toml
 Makefile
